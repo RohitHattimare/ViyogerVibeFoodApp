@@ -1,20 +1,33 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { ImageBackground, SafeAreaView, StyleSheet, View } from 'react-native';
+import LaunchScreen from './screens/LaunchScreen';
 
 export default function App() {
-  return (
+  return (<>
     <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
       <StatusBar style="auto" />
+      <ImageBackground
+        style={styles.startScreen}
+        imageStyle={{ zIndex: 2 }}
+        source={require("./assets/background.jpg")}
+        resizeMode="cover"
+      >
+        {/* <SafeAreaView style={styles.startScreen}> */}
+        <LaunchScreen />
+        {/* </SafeAreaView> */}
+      </ImageBackground>
     </View>
+  </>
+
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+  },
+  startScreen: {
+    flex: 1,
+    justifyContent: "center",
   },
 });
