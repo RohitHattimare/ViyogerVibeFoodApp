@@ -1,55 +1,58 @@
-import { StatusBar } from 'expo-status-bar';
-import { ImageBackground, SafeAreaView, StyleSheet, View } from 'react-native';
-import LaunchScreen from './screens/LaunchScreen';
-import { useEffect, useState } from 'react';
-import { SplashScreen } from 'expo';
+import { StatusBar } from "expo-status-bar";
+import { SafeAreaView, StyleSheet, } from "react-native";
+import { NavigationContainer } from "@react-navigation/native";
+import { useState } from "react";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+
+import LaunchScreen from "./screens/LaunchScreen";
+import LoginScreen from "./screens/login/LoginScreen";
+import SignUpScreen from "./screens/signup/SignUpScreen";
+import HomeScreen from "./screens/authenticatedScreens/HomeScreen";
+import ResturantList from "./screens/authenticatedScreens/ResturantList";
+import MenuScreen from "./screens/authenticatedScreens/MenuScreen";
+
+const Stack = createNativeStackNavigator();
+
+//Non Authenticated Screens
+const NonAuthScreens = [
+  { name: "LaunchScreen", component: LaunchScreen, title: "Welcome" },
+  { name: "LoginScreen", component: LoginScreen, title: "Login" },
+  { name: "SignUpScreen", component: SignUpScreen, title: "Sign Up" },
+];
+
+const screens = [
+  { name: "Home", component: HomeScreen, title: "Home" },
+  { name: "ResturantList", component: ResturantList, title: "Resturants" },
+  { name: "Menu", component: MenuScreen, title: "Menu" },
+];
 
 export default function App() {
-  const [isAppReady, setAppReady] = useState(false);
-
-  // useEffect(() => {
-  //   async function prepareApp() {
-  //     try {
-  //       // Prevent SplashScreen from auto-hiding
-  //       await SplashScreen.preventAutoHideAsync();
-
-  //       // Load your app assets here (e.g., images)
-  //       const imageAssets = [require('./assets/background.jpg')];
-  //       const cacheImages = imageAssets.map((image) =>
-  //         Image.prefetch(image)
-  //       );
-
-  //       await Promise.all(cacheImages);
-
-  //       // Indicate that the app is ready to be displayed, and hide SplashScreen
-  //       setAppReady(true);
-  //       await SplashScreen.hideAsync();
-  //     } catch (e) {
-  //       console.warn("Error in prepareApp: ", e);
-  //     }
-  //   }
-
-  //   prepareApp();
-  // }, []);
-
-  // if (!isAppReady) {
-  //   return null; // or a loading indicator
-  // }
-
+  const [loggedIn, setLoggedIn] = useState(false)
   return (
-    <View style={styles.container}>
+    <>
       <StatusBar style="auto" />
-      <ImageBackground
-        style={styles.startScreen}
-        imageStyle={{ zIndex: 2 }}
-        source={require("./assets/background.jpg")}
-        resizeMode="cover"
-      >
-        <SafeAreaView style={styles.startScreen}>
-          <LaunchScreen />
-        </SafeAreaView>
-      </ImageBackground>
-    </View>
+      <SafeAreaView style={styles.startScreen}>
+        <NavigationContainer>
+          {loggedIn ? screens.map(createScreen) : NonAuthScreens.map(createScreen)}
+        </NavigationContainer>
+        <LaunchScreen />
+      </SafeAreaView>
+    </>
+  );
+}
+
+function createScreen({ name, component, title, headerShown = true }) {
+  return (
+    <Stack.Screen
+      key={name}
+      name={name}
+      component={component}
+      options={{
+        title: title,
+        headerTitleAlign: "center",
+        headerShown: headerShown && Boolean(title),
+      }}
+    />
   );
 }
 
@@ -59,6 +62,6 @@ const styles = StyleSheet.create({
   },
   startScreen: {
     flex: 1,
-    justifyContent: "center",
+    // justifyContent: "center",
   },
 });
