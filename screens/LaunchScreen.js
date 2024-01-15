@@ -2,21 +2,24 @@ import { ImageBackground, StyleSheet, Text, View } from "react-native";
 import OutlinedButton from "../components/UI/OutlinedButton";
 import Logo from "../components/UI/Logo";
 
-function LaunchScreen() {
+function LaunchScreen({ navigation }) {
+    console.log("launchScreen props", navigation);
 
-    function signInHandler() {
-        console.log("Sign In");
+    function logInHandler() {
+        console.log("Log In");
+        navigation.navigate("Login");
     }
 
     function signUpHandler() {
         console.log("Sign Up");
+        navigation.navigate("SignUp");
     }
 
 
     return (
         <ImageBackground
             style={styles.startScreen}
-            imageStyle={{ zIndex: 2 }}
+            imageStyle={{ zIndex: 0 }}
             source={require("../assets/Images/background.webp")}
             resizeMode="cover"
         >
@@ -31,8 +34,8 @@ function LaunchScreen() {
                     <Logo />
                 </View>
                 <View style={styles.buttonContainer}>
-                    <OutlinedButton icon={"login"} onPress={signInHandler}>Sign Up</OutlinedButton>
-                    <OutlinedButton icon={"adduser"} onPress={signUpHandler}>Log In</OutlinedButton>
+                    <OutlinedButton icon={"login"} onPress={logInHandler}>Log In</OutlinedButton>
+                    <OutlinedButton icon={"adduser"} onPress={signUpHandler}>Sign Up</OutlinedButton>
                 </View>
             </View>
         </ImageBackground>
@@ -46,8 +49,7 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: "center",
         justifyContent: "center",
-        backgroundColor: "transparent"
-
+        backgroundColor: "transparent",
     },
     text: {
         marginVertical: 20,

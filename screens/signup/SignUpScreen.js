@@ -1,21 +1,23 @@
-import { StyleSheet, View } from "react-native";
-
-function LoginScreen() {
+import { ImageBackground, StyleSheet, View } from "react-native";
+import SignUpForm from "../signup/SignUpScreen";
+function SignUpScreen() {
     return (
         <View style={styles.container}>
-            <Text>
-                Sign Up Screen
-            </Text>
+            <SignUpForm />
         </View>
     );
 }
 
-export default LoginScreen;
+export default SignUpScreen;
 
 const styles = StyleSheet.create({
     container: {
         fontSize: 20,
         fontWeight: 'bold',
         padding: 10,
-    }
+    },
+    backgroundImage: {
+        flex: 1,
+        resizeMode: "cover",
+    },
 });

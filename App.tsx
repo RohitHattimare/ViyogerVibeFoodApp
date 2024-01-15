@@ -1,5 +1,5 @@
 import { StatusBar } from "expo-status-bar";
-import { SafeAreaView, StyleSheet, } from "react-native";
+import { ImageBackground, SafeAreaView, StyleSheet } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { useState } from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
@@ -10,14 +10,30 @@ import SignUpScreen from "./screens/signup/SignUpScreen";
 import HomeScreen from "./screens/authenticatedScreens/HomeScreen";
 import ResturantList from "./screens/authenticatedScreens/ResturantList";
 import MenuScreen from "./screens/authenticatedScreens/MenuScreen";
+import SignUpForm from "./components/UI/SignUpForm";
 
 const Stack = createNativeStackNavigator();
 
 //Non Authenticated Screens
 const NonAuthScreens = [
-  { name: "LaunchScreen", component: LaunchScreen, title: "Welcome" },
-  { name: "LoginScreen", component: LoginScreen, title: "Login" },
-  { name: "SignUpScreen", component: SignUpScreen, title: "Sign Up" },
+  {
+    name: "LaunchScreen",
+    component: LaunchScreen,
+    title: "Welcome",
+    headerShown: false,
+  },
+  {
+    name: "Login",
+    component: LoginScreen,
+    title: "Login",
+    headerShown: false,
+  },
+  {
+    name: "SignUp",
+    component: SignUpForm,
+    title: "Sign Up",
+    headerShown: false,
+  },
 ];
 
 const screens = [
@@ -27,21 +43,38 @@ const screens = [
 ];
 
 export default function App() {
-  const [loggedIn, setLoggedIn] = useState(false)
+  const [loggedIn, setLoggedIn] = useState(false);
   return (
-    <>
-      <StatusBar style="auto" />
+    <ImageBackground
+      style={styles.backgroundImage}
+      imageStyle={{ zIndex: 0 }}
+      source={require("./assets/Images/BackgroundScreen.png")}
+      resizeMode="cover"
+    >
+      <StatusBar style="dark" />
       <SafeAreaView style={styles.startScreen}>
         <NavigationContainer>
-          {loggedIn ? screens.map(createScreen) : NonAuthScreens.map(createScreen)}
+          <Stack.Navigator
+            screenOptions={{ contentStyle: { backgroundColor: "transparent" } }}
+          >
+            {loggedIn
+              ? screens.map((screen) => createScreen(screen))
+              : NonAuthScreens.map((screen) => createScreen(screen))}
+          </Stack.Navigator>
         </NavigationContainer>
-        <LaunchScreen />
       </SafeAreaView>
-    </>
+    </ImageBackground>
   );
 }
 
-function createScreen({ name, component, title, headerShown = true }) {
+type Screen = {
+  name: string;
+  component: any;
+  title?: string;
+  headerShown?: boolean;
+};
+
+function createScreen({ name, component, title, headerShown = true }: Screen) {
   return (
     <Stack.Screen
       key={name}
@@ -62,6 +95,10 @@ const styles = StyleSheet.create({
   },
   startScreen: {
     flex: 1,
-    // justifyContent: "center",
+    justifyContent: "center",
+  },
+  backgroundImage: {
+    flex: 1,
+    resizeMode: "cover", // or 'stretch' or 'contain'
   },
 });
