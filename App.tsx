@@ -12,6 +12,7 @@ import ResturantList from "./screens/authenticatedScreens/ResturantList";
 import MenuScreen from "./screens/authenticatedScreens/MenuScreen";
 import SignUpForm from "./components/UI/SignUpForm";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { theme } from "./contsants/Theme";
 
 const Stack = createNativeStackNavigator();
 
@@ -43,26 +44,62 @@ const screens = [
   { name: "Menu", component: MenuScreen, title: "Menu" },
 ];
 
-export default function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+function AuthStack() {
+  return (
+    <Stack.Navigator>
+      {NonAuthScreens.map((screen) => createScreen(screen))}
+    </Stack.Navigator>
+  );
+}
+
+function AuthenticatedStack() {
+  // const authCtx = useContext(AuthContext);
+  return (
+    <Stack.Navigator
+      screenOptions={{
+        headerStyle: { backgroundColor: "white" },
+        headerTintColor: theme.green,
+        contentStyle: { backgroundColor: "transparent" },
+        // headerRight: () => (
+        //   <IconButton
+        //     icon={"exit"}
+        //     color={"white"}
+        //     size={24}
+        //     onPress={authCtx.logout}
+        //   />
+        // ),
+      }}
+    >
+      {screens.map((screen) => createScreen(screen))}
+    </Stack.Navigator>
+  );
+}
+
+function Root() {
   const authCtx = useContext(AuthContext);
-  console.log("Inside App authCtx", authCtx);
 
   useEffect(() => {
     async function fetchToken() {
       const token = await AsyncStorage.getItem("token");
       token && authCtx.authenticate(token);
-      console.log("ApptokenToken", token);
-      console.log("ApptokenCtx", authCtx.isAuthenticated);
     }
     fetchToken();
   }, []);
 
-  useEffect(() => {
-    console.log("Inside App authCtxc");
-    setIsLoggedIn(authCtx.isAuthenticated);
-  }, [authCtx.isAuthenticated]);
+  return <Navigation />;
+}
 
+function Navigation() {
+  const authCtx = useContext(AuthContext);
+
+  return (
+    <NavigationContainer>
+      {authCtx.isAuthenticated ? <AuthenticatedStack /> : <AuthStack />}
+    </NavigationContainer>
+  );
+}
+
+export default function App() {
   return (
     <AuthContextProvider>
       <ImageBackground
@@ -73,17 +110,7 @@ export default function App() {
       >
         <StatusBar style="dark" />
         <SafeAreaView style={styles.startScreen}>
-          <NavigationContainer>
-            <Stack.Navigator
-              screenOptions={{
-                contentStyle: { backgroundColor: "transparent" },
-              }}
-            >
-              {isLoggedIn
-                ? screens.map((screen) => createScreen(screen))
-                : NonAuthScreens.map((screen) => createScreen(screen))}
-            </Stack.Navigator>
-          </NavigationContainer>
+          <Root />
         </SafeAreaView>
       </ImageBackground>
     </AuthContextProvider>
