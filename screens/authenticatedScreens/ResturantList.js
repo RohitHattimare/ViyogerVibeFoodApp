@@ -1,8 +1,8 @@
 import { FlatList, ScrollView, StyleSheet, Text, View } from "react-native";
-import RestaurantItem from "../../components/UI/ResturantItem";
+import RestaurantItem from "../../components/ResturantItem";
+
 function Resturants() {
     const RESTURANTS = require('../../contsants/resturant_data.json');
-    console.log(RESTURANTS);
     return (
         <ScrollView >
             <View style={styles.container}>

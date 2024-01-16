@@ -1,21 +1,59 @@
-import { StyleSheet, Text, View } from "react-native";
+import { FlatList, ScrollView, StyleSheet, Text, View } from "react-native";
+import MenuItem from "../../components/MenuItem";
+import FilledButton from "../../components/UI/FilledButton";
 
-function LoginScreen() {
+function MenuScreen() {
+    function orderHandler() {
+        console.log("Order Clicked - Go to Cart");
+    }
+
+    const DISHES = require('../../contsants/dishes_data.json');
     return (
-        <View style={styles.container}>
-            <Text>
-                Menu Screen
-            </Text>
-        </View>
+        <ScrollView >
+            <View style={styles.container}>
+                <Text style={styles.label}>
+                    Explore Our Delightful Delicacies
+                </Text>
+                <FlatList
+                    data={DISHES}
+                    style={styles.listContainer}
+                    renderItem={(itemData) => {
+                        return (
+                            <MenuItem
+                                cost={itemData.item.cost}
+                                name={itemData.item.name}
+                                image={itemData.item.image}
+                                rating={itemData.item.rating}
+                            />
+                        );
+                    }}
+                    keyExtractor={(item) => item.id}
+                    alwaysBounceVertical={false}
+                />
+                <FilledButton onPress={orderHandler}>Order</FilledButton>
+            </View>
+        </ScrollView >
     );
 }
 
-export default LoginScreen;
+export default MenuScreen;
 
 const styles = StyleSheet.create({
     container: {
         fontSize: 20,
         fontWeight: 'bold',
+        // padding: 10,
+        marginHorizontal: 10,
+        flex: 1,
+    },
+    listContainer: {
+        flex: 1,
+        // marginTop: 14,
+    },
+    label: {
+        fontSize: 20,
+        fontWeight: 'bold',
         padding: 10,
+        marginVertical: 6,
     }
 });
