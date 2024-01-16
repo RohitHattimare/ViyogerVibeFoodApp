@@ -1,11 +1,11 @@
 import { ImageBackground, StyleSheet, Text, View } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { AntDesign } from "@expo/vector-icons";
+import { theme } from "../../contsants/Theme";
+import { Entypo } from "@expo/vector-icons";
 
 import ProfileScreen from "./Profile";
 import CartScreen from "./Cart";
-import { theme } from "../../contsants/Theme";
-import { NavigationContainer } from "@react-navigation/native";
 import HomeScreen from "./HomeScreen";
 
 const Tab = createBottomTabNavigator();
@@ -16,7 +16,7 @@ type Screen = {
   component: any;
   title?: string;
   headerShown?: boolean;
-  iconName?: any;
+  icon?: any;
 };
 
 const TabScreen = [
@@ -39,7 +39,7 @@ const TabScreen = [
     name: "Cart",
     component: CartScreen,
     title: "Cart",
-    icon: "shoppingcart",
+    icon: "shopping-cart",
   },
 ];
 
@@ -49,7 +49,7 @@ function createTabScreen({
   component,
   title,
   headerShown = true,
-  iconName,
+  icon,
 }: Screen) {
   return (
     <StackType.Screen
@@ -60,9 +60,12 @@ function createTabScreen({
         title: title,
         headerTitleAlign: "center",
         headerShown: headerShown && Boolean(title),
-        tabBarIcon: ({ color, size }: { color: string; size: number }) => (
-          <AntDesign name={iconName} size={size} color={color} />
-        ),
+        tabBarIcon: ({ color, size }: { color: string; size: number }) => {
+          return (
+            // <AntDesign name={icon} size={size} color={color} />
+            <Entypo name={icon} size={24} color={color} />
+          );
+        },
       }}
     />
   );
@@ -81,8 +84,8 @@ function AuthStack() {
           headerStyle: { backgroundColor: theme.lightGreen },
           contentStyle: { backgroundColor: "transparent" },
           tabBarStyle: { backgroundColor: theme.lightGreen },
-          tabBarActiveTintColor: theme.primary,
-          tabBarInactiveTintColor: theme.gray,
+          tabBarActiveTintColor: "black",
+          tabBarInactiveTintColor: theme.primary,
         })}
       >
         {TabScreen.map((screen) => createTabScreen(screen))}
