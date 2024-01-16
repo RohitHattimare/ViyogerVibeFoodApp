@@ -7,30 +7,40 @@ import AuthContextProvider, { AuthContext } from "./store/authContext";
 
 import LaunchScreen from "./screens/LaunchScreen";
 import LoginScreen from "./screens/login/LoginScreen";
-import HomeScreen from "./screens/authenticatedScreens/HomeScreen";
-import ResturantList from "./screens/authenticatedScreens/ResturantList";
 import MenuScreen from "./screens/authenticatedScreens/MenuScreen";
 import SignUpForm from "./components/UI/SignUpForm";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { theme } from "./contsants/Theme";
+import TabNavigator from "./screens/authenticatedScreens/TabNavigator";
+import Resturants from "./screens/authenticatedScreens/ResturantList";
 
 const Stack = createNativeStackNavigator();
+
+type Screen = {
+  StackType: any;
+  name: string;
+  component: any;
+  title?: string;
+  headerShown?: boolean;
+};
 
 //Non Authenticated Screens
 const NonAuthScreens = [
   {
+    StackType: Stack,
     name: "LaunchScreen",
     component: LaunchScreen,
     title: "Welcome",
     headerShown: false,
   },
   {
+    StackType: Stack,
     name: "Login",
     component: LoginScreen,
     title: "Login",
     headerShown: false,
   },
   {
+    StackType: Stack,
     name: "SignUp",
     component: SignUpForm,
     title: "Sign Up",
@@ -39,15 +49,33 @@ const NonAuthScreens = [
 ];
 
 const screens = [
-  { name: "Home", component: HomeScreen, title: "Home" },
-  { name: "ResturantList", component: ResturantList, title: "Resturants" },
-  { name: "Menu", component: MenuScreen, title: "Menu" },
+  {
+    StackType: Stack,
+    name: "Tabs",
+    component: TabNavigator,
+    title: "TabNavigator",
+    headerShown: false,
+  },
+  {
+    StackType: Stack,
+    name: "ResturantList",
+    component: Resturants,
+    title: "Resturants",
+    headerShown: true,
+  },
+  {
+    StackType: Stack,
+    name: "Menu",
+    component: MenuScreen,
+    title: "Menu",
+    headerShown: true,
+  },
 ];
 
 function AuthStack() {
   return (
     <Stack.Navigator>
-      {NonAuthScreens.map((screen) => createScreen(screen))}
+      {NonAuthScreens.map((screen) => createStackScreen(screen))}
     </Stack.Navigator>
   );
 }
@@ -58,7 +86,7 @@ function AuthenticatedStack() {
     <Stack.Navigator
       screenOptions={{
         headerStyle: { backgroundColor: "white" },
-        headerTintColor: theme.green,
+        headerTintColor: "#000000",
         contentStyle: { backgroundColor: "transparent" },
         // headerRight: () => (
         //   <IconButton
@@ -70,7 +98,7 @@ function AuthenticatedStack() {
         // ),
       }}
     >
-      {screens.map((screen) => createScreen(screen))}
+      {screens.map((screen) => createStackScreen(screen))}
     </Stack.Navigator>
   );
 }
@@ -117,16 +145,15 @@ export default function App() {
   );
 }
 
-type Screen = {
-  name: string;
-  component: any;
-  title?: string;
-  headerShown?: boolean;
-};
-
-function createScreen({ name, component, title, headerShown = true }: Screen) {
+function createStackScreen({
+  StackType,
+  name,
+  component,
+  title,
+  headerShown,
+}: Screen) {
   return (
-    <Stack.Screen
+    <StackType.Screen
       key={name}
       name={name}
       component={component}

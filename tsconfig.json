@@ -7,5 +7,5 @@
   "include": [
     "**/*.ts",
     "**/*.tsx"
-  ]
+, "screens/authenticatedScreens/HomeScreen.js"  ]
 }

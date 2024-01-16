@@ -1,5 +1,4 @@
 import { Pressable, StyleSheet, Text } from "react-native";
-import { AntDesign } from '@expo/vector-icons';
 import { theme } from "../../contsants/Theme";
 
 function FilledButton({ children, onPress }) {
@@ -29,6 +28,7 @@ const styles = StyleSheet.create({
         shadowColor: theme.shadow,
         shadowOffset: { width: 0, height: 2 },
         shadowRadius: 24,
+        elevation: 4, // For Android
     },
     title: {
         color: theme.green,

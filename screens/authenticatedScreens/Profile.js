@@ -1,16 +1,16 @@
 import { StyleSheet, Text, View } from "react-native";
 
-function CartScreen() {
+function ProfileScreen() {
     return (
         <View style={styles.container}>
             <Text>
-                Cart Screen
+                PROFILE sCREEN
             </Text>
         </View>
     );
 }
 
-export default CartScreen;
+export default ProfileScreen;
 
 const styles = StyleSheet.create({
     container: {
