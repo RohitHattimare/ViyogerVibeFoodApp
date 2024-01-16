@@ -1,13 +1,17 @@
-import { useState } from 'react';
-import { Alert, Button, ImageBackground, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { useContext, useState } from 'react';
+import { Alert, StyleSheet, View } from 'react-native';
 import Input from './Input';
 import FilledButton from './FilledButton';
+import { signupUser } from '../../firebase/users/userServices';
+import { AuthContext } from '../../store/authContext';
 
 function SignUpForm({ navigation }) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [mobileNumber, setMobileNumber] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
+    const authCtx = useContext(AuthContext);
+
 
     const isValidEmail = (email) => {
         // Simple email format validation
@@ -23,7 +27,7 @@ function SignUpForm({ navigation }) {
     // Mobile number validation function
     const isValidMobileNumber = (mobileNumber) => {
         // Mobile number should have 10 digits
-        const mobileRegex = /^\d{13}$/;
+        const mobileRegex = /^\d{10}$/;
         return mobileRegex.test(mobileNumber);
     };
 
@@ -43,6 +47,7 @@ function SignUpForm({ navigation }) {
     const signUpHandle = () => {
         // Perform signup logic here
         console.log(`Signing up with email: ${email}, password: ${password}, and mobile number: ${mobileNumber}`);
+        signupUser({ email, password, authCtx });
         navigation.goBack();
     };
 

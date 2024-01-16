@@ -1,16 +1,17 @@
 import { StatusBar } from "expo-status-bar";
 import { ImageBackground, SafeAreaView, StyleSheet } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import AuthContextProvider, { AuthContext } from "./store/authContext";
 
 import LaunchScreen from "./screens/LaunchScreen";
 import LoginScreen from "./screens/login/LoginScreen";
-import SignUpScreen from "./screens/signup/SignUpScreen";
 import HomeScreen from "./screens/authenticatedScreens/HomeScreen";
 import ResturantList from "./screens/authenticatedScreens/ResturantList";
 import MenuScreen from "./screens/authenticatedScreens/MenuScreen";
 import SignUpForm from "./components/UI/SignUpForm";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Stack = createNativeStackNavigator();
 
@@ -43,27 +44,49 @@ const screens = [
 ];
 
 export default function App() {
-  const [loggedIn, setLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const authCtx = useContext(AuthContext);
+  console.log("Inside App authCtx", authCtx);
+
+  useEffect(() => {
+    async function fetchToken() {
+      const token = await AsyncStorage.getItem("token");
+      token && authCtx.authenticate(token);
+      console.log("ApptokenToken", token);
+      console.log("ApptokenCtx", authCtx.isAuthenticated);
+    }
+    fetchToken();
+  }, []);
+
+  useEffect(() => {
+    console.log("Inside App authCtxc");
+    setIsLoggedIn(authCtx.isAuthenticated);
+  }, [authCtx.isAuthenticated]);
+
   return (
-    <ImageBackground
-      style={styles.backgroundImage}
-      imageStyle={{ zIndex: 0 }}
-      source={require("./assets/Images/BackgroundScreen.png")}
-      resizeMode="cover"
-    >
-      <StatusBar style="dark" />
-      <SafeAreaView style={styles.startScreen}>
-        <NavigationContainer>
-          <Stack.Navigator
-            screenOptions={{ contentStyle: { backgroundColor: "transparent" } }}
-          >
-            {loggedIn
-              ? screens.map((screen) => createScreen(screen))
-              : NonAuthScreens.map((screen) => createScreen(screen))}
-          </Stack.Navigator>
-        </NavigationContainer>
-      </SafeAreaView>
-    </ImageBackground>
+    <AuthContextProvider>
+      <ImageBackground
+        style={styles.backgroundImage}
+        imageStyle={{ zIndex: 0 }}
+        source={require("./assets/Images/BackgroundScreen.png")}
+        resizeMode="cover"
+      >
+        <StatusBar style="dark" />
+        <SafeAreaView style={styles.startScreen}>
+          <NavigationContainer>
+            <Stack.Navigator
+              screenOptions={{
+                contentStyle: { backgroundColor: "transparent" },
+              }}
+            >
+              {isLoggedIn
+                ? screens.map((screen) => createScreen(screen))
+                : NonAuthScreens.map((screen) => createScreen(screen))}
+            </Stack.Navigator>
+          </NavigationContainer>
+        </SafeAreaView>
+      </ImageBackground>
+    </AuthContextProvider>
   );
 }
 
