@@ -1,19 +1,27 @@
 import { Image, Pressable, StyleSheet, Text, View } from "react-native";
 import { theme } from "../contsants/Theme";
 import { AntDesign } from '@expo/vector-icons';
-import { useNavigation } from '@react-navigation/native';
 import IconButton from "./UI/IconButton"
+import { useContext } from "react";
+import CartContext from "../store/cartContext";
 
-function MenuItem({ name, cost, rating, image }) {
-    const navigation = useNavigation();
-    function handlePress() {
-        console.log("Resturant pressed");
-        navigation.navigate("Menu")
+function MenuItem({ id, name, cost, rating, image }) {
+
+    const cartCtx = useContext(CartContext);
+    const { addItem, removeItem } = cartCtx;
+    // const price = +cost;
+    function addToCartHandler() {
+        console.log("added 1 qty to cart");
+        addItem({ id, name, price: cost, image, qty: 1 });
     }
 
+    function removeFromCartHandler() {
+        console.log("removed 1 qty from cart");
+        removeItem(id);
+    }
 
     return (
-        <Pressable android_ripple={{ color: theme.accent }} onPress={handlePress} >
+        <Pressable android_ripple={{ color: theme.accent }} >
             <View style={styles.container}>
                 <View style={styles.data}>
                     <Text style={styles.title} numberOfLines={1} ellipsizeMode="tail">{name}</Text>
@@ -28,14 +36,14 @@ function MenuItem({ name, cost, rating, image }) {
                         name="remove-circle-outline"
                         size={24}
                         color="black"
-                        onPress={() => console.log("Removed From Cart")}
+                        onPress={removeFromCartHandler}
                     />
                     <Image style={styles.image} source={{ uri: image }} />
                     <IconButton
                         name="add-circle-outline"
                         size={24}
                         color="black"
-                        onPress={() => console.log("Added From Cart")}
+                        onPress={addToCartHandler}
                     />
                 </View>
             </View>
@@ -63,7 +71,7 @@ const styles = StyleSheet.create({
         height: 85,
         width: 85,
         borderRadius: 5,
-        marginHorizontal: 10,
+        // marginHorizontal: 4,
         paddingHorizontal: 10,
         borderColor: 'black',
         borderWidth: 1,
@@ -103,5 +111,6 @@ const styles = StyleSheet.create({
     imageContainer: {
         flexDirection: 'row',
         alignItems: 'center',
+        justifyContent: 'center',
     }
 });

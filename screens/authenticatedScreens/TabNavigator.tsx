@@ -5,7 +5,7 @@ import { theme } from "../../contsants/Theme";
 import { Entypo } from "@expo/vector-icons";
 
 import ProfileScreen from "./Profile";
-import CartScreen from "./Cart";
+import CartScreen from "./Cart/Cart";
 import HomeScreen from "./HomeScreen";
 
 const Tab = createBottomTabNavigator();

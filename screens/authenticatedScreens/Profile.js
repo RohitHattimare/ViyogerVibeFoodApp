@@ -1,10 +1,11 @@
-import { StyleSheet, Text, View } from "react-native";
+import { ImageBackground, StyleSheet, Text, View } from "react-native";
 import FilledButton from "../../components/UI/FilledButton";
 import { useContext } from "react";
 import { AuthContext } from "../../store/authContext";
 
 function ProfileScreen() {
     const authCtx = useContext(AuthContext);
+    
 
     function logOutHandler() {
         console.log("User Logged Out");
@@ -12,14 +13,21 @@ function ProfileScreen() {
     }
 
     return (
-        <View style={styles.container}>
-            <Text style={styles.text}>
-                User Name
-            </Text>
-            <FilledButton onPress={logOutHandler}>
-                Log Out
-            </FilledButton>
-        </View>
+        <ImageBackground
+            style={styles.backgroundImage}
+            imageStyle={{ zIndex: 0 }}
+            source={require("../../assets/Images/BackgroundScreen.png")}
+            resizeMode="cover"
+        >
+            <View style={styles.container}>
+                <Text style={styles.text}>
+                    User Name
+                </Text>
+                <FilledButton onPress={logOutHandler}>
+                    Log Out
+                </FilledButton>
+            </View>
+        </ImageBackground>
     );
 }
 
@@ -37,5 +45,9 @@ const styles = StyleSheet.create({
         padding: 10,
         marginVertical: 6,
         textAlign: "center",
+    },
+    backgroundImage: {
+        flex: 1,
+        resizeMode: "cover", // or 'stretch' or 'contain'
     }
 });

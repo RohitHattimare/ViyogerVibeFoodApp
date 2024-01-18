@@ -4,6 +4,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { useContext, useEffect, useState } from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import AuthContextProvider, { AuthContext } from "./store/authContext";
+import CartProvider from "./store/CartProvider";
 
 import LaunchScreen from "./screens/LaunchScreen";
 import LoginScreen from "./screens/login/LoginScreen";
@@ -88,14 +89,6 @@ function AuthenticatedStack() {
         headerStyle: { backgroundColor: "white" },
         headerTintColor: "#000000",
         contentStyle: { backgroundColor: "transparent" },
-        // headerRight: () => (
-        //   <IconButton
-        //     icon={"exit"}
-        //     color={"white"}
-        //     size={24}
-        //     onPress={authCtx.logout}
-        //   />
-        // ),
       }}
     >
       {screens.map((screen) => createStackScreen(screen))}
@@ -130,17 +123,19 @@ function Navigation() {
 export default function App() {
   return (
     <AuthContextProvider>
-      <ImageBackground
-        style={styles.backgroundImage}
-        imageStyle={{ zIndex: 0 }}
-        source={require("./assets/Images/BackgroundScreen.png")}
-        resizeMode="cover"
-      >
-        <StatusBar style="dark" />
-        <SafeAreaView style={styles.startScreen}>
-          <Root />
-        </SafeAreaView>
-      </ImageBackground>
+      <CartProvider>
+        <ImageBackground
+          style={styles.backgroundImage}
+          imageStyle={{ zIndex: 0 }}
+          source={require("./assets/Images/BackgroundScreen.png")}
+          resizeMode="cover"
+        >
+          <StatusBar style="dark" />
+          <SafeAreaView style={styles.startScreen}>
+            <Root />
+          </SafeAreaView>
+        </ImageBackground>
+      </CartProvider>
     </AuthContextProvider>
   );
 }

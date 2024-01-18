@@ -1,10 +1,13 @@
 import { FlatList, ScrollView, StyleSheet, Text, View } from "react-native";
 import MenuItem from "../../components/MenuItem";
 import FilledButton from "../../components/UI/FilledButton";
+import { useNavigation } from "@react-navigation/native";
 
 function MenuScreen() {
+    const navigation = useNavigation();
     function orderHandler() {
         console.log("Order Clicked - Go to Cart");
+        navigation.navigate('Cart');
     }
 
     const DISHES = require('../../contsants/dishes_data.json');
@@ -20,6 +23,7 @@ function MenuScreen() {
                     renderItem={(itemData) => {
                         return (
                             <MenuItem
+                                id={itemData.item.id}
                                 cost={itemData.item.cost}
                                 name={itemData.item.name}
                                 image={itemData.item.image}

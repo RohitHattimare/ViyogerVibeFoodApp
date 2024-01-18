@@ -23,6 +23,8 @@ export const AuthContextProvider = ({ children }) => {
         setAuthToken(null);
         AsyncStorage.removeItem('token');
     }
+
+
     const value = {
         token: authToken,
         isAuthenticated: !!authToken,
