@@ -2,14 +2,20 @@ import { ImageBackground, StyleSheet, Text, View } from "react-native";
 import FilledButton from "../../components/UI/FilledButton";
 import { useContext } from "react";
 import { AuthContext } from "../../store/authContext";
+import { useNavigation } from "@react-navigation/native";
 
 function ProfileScreen() {
     const authCtx = useContext(AuthContext);
-    
+    const navigation = useNavigation();
 
     function logOutHandler() {
         console.log("User Logged Out");
         authCtx.logout();
+    }
+
+    function orderHistoryHandler() {
+        console.log("Opened Order History");
+        navigation.navigate("Orders");
     }
 
     return (
@@ -20,12 +26,19 @@ function ProfileScreen() {
             resizeMode="cover"
         >
             <View style={styles.container}>
-                <Text style={styles.text}>
-                    User Name
-                </Text>
-                <FilledButton onPress={logOutHandler}>
-                    Log Out
-                </FilledButton>
+                <View>
+                    <Text style={styles.text}>
+                        User Name
+                    </Text>
+                </View>
+                <View>
+                    <FilledButton onPress={orderHistoryHandler}>
+                        Order History
+                    </FilledButton>
+                    <FilledButton onPress={logOutHandler}>
+                        Log Out
+                    </FilledButton>
+                </View>
             </View>
         </ImageBackground>
     );
@@ -38,6 +51,8 @@ const styles = StyleSheet.create({
         fontSize: 20,
         fontWeight: 'bold',
         padding: 10,
+        flex: 1,
+        justifyContent: "space-between",
     },
     text: {
         fontSize: 20,
