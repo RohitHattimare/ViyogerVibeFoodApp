@@ -4,6 +4,8 @@ import { NavigationContainer } from "@react-navigation/native";
 import { useContext, useEffect, useState } from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import AuthContextProvider, { AuthContext } from "./store/authContext";
+import CartProvider from "./store/CartProvider";
+import OrderProvider from "./store/OrderProvider";
 
 import LaunchScreen from "./screens/LaunchScreen";
 import LoginScreen from "./screens/login/LoginScreen";
@@ -12,6 +14,7 @@ import SignUpForm from "./components/UI/SignUpForm";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import TabNavigator from "./screens/authenticatedScreens/TabNavigator";
 import Resturants from "./screens/authenticatedScreens/ResturantList";
+import OrderScreen from "./screens/authenticatedScreens/OrdersScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -70,6 +73,13 @@ const screens = [
     title: "Menu",
     headerShown: true,
   },
+  {
+    StackType: Stack,
+    name: "Orders",
+    component: OrderScreen,
+    title: "Order History",
+    headerShown: true,
+  },
 ];
 
 function AuthStack() {
@@ -88,14 +98,6 @@ function AuthenticatedStack() {
         headerStyle: { backgroundColor: "white" },
         headerTintColor: "#000000",
         contentStyle: { backgroundColor: "transparent" },
-        // headerRight: () => (
-        //   <IconButton
-        //     icon={"exit"}
-        //     color={"white"}
-        //     size={24}
-        //     onPress={authCtx.logout}
-        //   />
-        // ),
       }}
     >
       {screens.map((screen) => createStackScreen(screen))}
@@ -130,17 +132,21 @@ function Navigation() {
 export default function App() {
   return (
     <AuthContextProvider>
-      <ImageBackground
-        style={styles.backgroundImage}
-        imageStyle={{ zIndex: 0 }}
-        source={require("./assets/Images/BackgroundScreen.png")}
-        resizeMode="cover"
-      >
-        <StatusBar style="dark" />
-        <SafeAreaView style={styles.startScreen}>
-          <Root />
-        </SafeAreaView>
-      </ImageBackground>
+      <CartProvider>
+        <OrderProvider>
+          <ImageBackground
+            style={styles.backgroundImage}
+            imageStyle={{ zIndex: 0 }}
+            source={require("./assets/Images/BackgroundScreen.png")}
+            resizeMode="cover"
+          >
+            <StatusBar style="dark" />
+            <SafeAreaView style={styles.startScreen}>
+              <Root />
+            </SafeAreaView>
+          </ImageBackground>
+        </OrderProvider>
+      </CartProvider>
     </AuthContextProvider>
   );
 }

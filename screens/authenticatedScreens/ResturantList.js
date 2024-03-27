@@ -15,6 +15,7 @@ function Resturants() {
                     renderItem={(itemData) => {
                         return (
                             <RestaurantItem
+                                
                                 restaurantName={itemData.item.restaurantName}
                                 rating={itemData.item.rating}
                                 typesOfFood={itemData.item.typesOfFood}
